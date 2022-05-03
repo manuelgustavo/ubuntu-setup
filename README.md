@@ -1,11 +1,12 @@
-# ubuntu-setup v1.0
+# ubuntu-setup v1.1
 
 > Tested against Ubuntu 20.04 and 22.04.
 
 The **bash** script `ubuntu.sh` is designed to offer minimal user interaction and install the following on Ubuntu.
 
 Running it in 1 line:
-```
+
+``` bash
 sudo apt-get update && sudo apt-get install -y -q wget && /bin/bash -c "$(wget --no-cache -O- https://raw.githubusercontent.com/manuelgustavo/ubuntu-setup/main/ubuntu.sh)"
 ```
 
