@@ -62,12 +62,24 @@ install_gnome_extensions()
             gir1.2-clutter-1.0 \
             gnome-system-monitor
 
-    echo "Installing Gnome Extension -- Dash to Panel https://extensions.gnome.org/extension/1160/dash-to-panel/"
-    gdbus call --session \
-            --dest org.gnome.Shell.Extensions \
-            --object-path /org/gnome/Shell/Extensions \
-            --method org.gnome.Shell.Extensions.InstallRemoteExtension \
-            "dash-to-panel@jderose9.github.com" 2>/dev/null || true
+    declare gnome_extension
+
+    gnome_extension="dash-to-panel@jderose9.github.com"
+    if [[ ! -d "$HOME/.local/share/gnome-shell/extensions/${gnome_extension}" ]]
+    then
+    {
+        echo "Installing Gnome Extension -- Dash to Panel https://extensions.gnome.org/extension/1160/dash-to-panel/"
+        gdbus call --session \
+                --dest org.gnome.Shell.Extensions \
+                --object-path /org/gnome/Shell/Extensions \
+                --method org.gnome.Shell.Extensions.InstallRemoteExtension \
+                "${gnome_extension}" 2>/dev/null || true
+    }
+    else
+    {
+        echo "Dash to Panel already installed."
+    }
+    fi
 
     # TODO: The below needs to be re-enabled when made available!
     # echo "Installing Gnome Extension -- system-monitor https://extensions.gnome.org/extension/120/system-monitor/"
@@ -77,19 +89,39 @@ install_gnome_extensions()
     #            --method org.gnome.Shell.Extensions.InstallRemoteExtension \
     #            "system-monitor@paradoxxx.zero.gmail.com" 2>/dev/null
 
-    echo "Installing Gnome Extension -- system-monitor-next https://extensions.gnome.org/extension/3010/system-monitor-next/"
-    gdbus call --session \
+    gnome_extension="system-monitor-next@paradoxxx.zero.gmail.com"
+    if [[ ! -d "$HOME/.local/share/gnome-shell/extensions/${gnome_extension}" ]]
+    then
+    {
+        echo "Installing Gnome Extension -- system-monitor-next https://extensions.gnome.org/extension/3010/system-monitor-next/"
+        gdbus call --session \
             --dest org.gnome.Shell.Extensions \
             --object-path /org/gnome/Shell/Extensions \
             --method org.gnome.Shell.Extensions.InstallRemoteExtension \
-            "system-monitor-next@paradoxxx.zero.gmail.com" 2>/dev/null || true
+            "${gnome_extension}" 2>/dev/null || true
+    }
+    else
+    {
+        echo "system-monitor-next already installed."
+    }
+    fi
 
-    echo "Installing Gnome Extension -- Removable Drive Menu https://extensions.gnome.org/extension/7/removable-drive-menu/"
-    gdbus call --session \
+    gnome_extension="drive-menu@gnome-shell-extensions.gcampax.github.com"
+    if [[ ! -d "$HOME/.local/share/gnome-shell/extensions/${gnome_extension}" ]]
+    then
+    {
+        echo "Installing Gnome Extension -- Removable Drive Menu https://extensions.gnome.org/extension/7/removable-drive-menu/"
+        gdbus call --session \
             --dest org.gnome.Shell.Extensions \
             --object-path /org/gnome/Shell/Extensions \
             --method org.gnome.Shell.Extensions.InstallRemoteExtension \
-            "drive-menu@gnome-shell-extensions.gcampax.github.com" 2>/dev/null || true
+            "${gnome_extension}" 2>/dev/null || true
+    }
+    else
+    {
+        echo "Removable Drive Menu already installed."
+    }
+    fi
 }
 
 install_tilix()
