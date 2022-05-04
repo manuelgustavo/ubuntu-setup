@@ -52,12 +52,12 @@ install_oh_my_zsh()
         # Change the default shell
         sudo sed -i -E "s/($USER.*)(bash)/\1zsh/" /etc/passwd
         sudo update-passwd
-        printf -v installed '%s\noh-my-zsh\n' "${installed}"
+        printf -v installed 'oh-my-zsh\n' "${installed}"
     }
     else
     {
         echo "If you want to install oh-my-zsh, delete the ~/.oh-my-zsh directory"
-        printf -v not_installed '%s\noh-my-zsh\n' "${not_installed}"
+        printf -v not_installed 'oh-my-zsh\n' "${not_installed}"
     }
     fi
     #     wget --no-cache https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh
@@ -89,12 +89,12 @@ install_gnome_extensions()
                 --object-path /org/gnome/Shell/Extensions \
                 --method org.gnome.Shell.Extensions.InstallRemoteExtension \
                 "${gnome_extension}" 2>/dev/null || true
-        printf -v installed '%s\nGnome Extension -- Dash to Panel\n' "${installed}"
+        printf -v installed 'Gnome Extension -- Dash to Panel\n' "${installed}"
     }
     else
     {
         echo "Skipping Dash to Panel -- already installed."
-        printf -v not_installed '%s\nGnome Extension -- Dash to Panel\n' "${not_installed}"
+        printf -v not_installed 'Gnome Extension -- Dash to Panel\n' "${not_installed}"
     }
     fi
 
@@ -116,12 +116,12 @@ install_gnome_extensions()
             --object-path /org/gnome/Shell/Extensions \
             --method org.gnome.Shell.Extensions.InstallRemoteExtension \
             "${gnome_extension}" 2>/dev/null || true
-        printf -v installed '%s\nGnome Extension -- system-monitor-next\n' "${installed}"
+        printf -v installed 'Gnome Extension -- system-monitor-next\n' "${installed}"
     }
     else
     {
         echo "Skipping system-monitor-next -- already installed."
-        printf -v not_installed '%s\nGnome Extension -- system-monitor-next\n' "${not_installed}"
+        printf -v not_installed 'Gnome Extension -- system-monitor-next\n' "${not_installed}"
     }
     fi
 
@@ -135,12 +135,12 @@ install_gnome_extensions()
             --object-path /org/gnome/Shell/Extensions \
             --method org.gnome.Shell.Extensions.InstallRemoteExtension \
             "${gnome_extension}" 2>/dev/null || true
-        printf -v installed '%s\nGnome Extension -- Removable Drive\n' "${installed}"
+        printf -v installed 'Gnome Extension -- Removable Drive\n' "${installed}"
     }
     else
     {
         echo "Skipping Removable Drive Menu -- already installed."
-        printf -v not_installed '%s\nGnome Extension -- Removable Drive Menu\n' "${not_installed}"
+        printf -v not_installed 'Gnome Extension -- Removable Drive Menu\n' "${not_installed}"
     }
     fi
 }
@@ -164,7 +164,7 @@ install_tilix()
         echo '    source /etc/profile.d/vte.sh'
         echo 'fi'
     } >> "$HOME/.zshrc"
-    printf -v installed '%s\nTilix\n' "${installed}"
+    printf -v installed 'Tilix\n' "${installed}"
 }
 
 install_vscode()
@@ -184,7 +184,7 @@ install_vscode()
     sudo apt install code
     echo "Installing VSCode extensions..."
     sh -c "$(wget --no-cache -O- https://raw.githubusercontent.com/manuelgustavo/vscode-extensions/main/vscode-extensions.sh)"
-    printf -v installed '%s\nVScode + extensions\n' "${installed}"
+    printf -v installed 'VScode + extensions\n' "${installed}"
 }
 
 main()
@@ -204,6 +204,7 @@ main()
     echo .
     echo "SCRIPT SUCCESS!"
     echo .
+    echo "-------------------- Summary --------------------"
     if [[ -n "${installed}" ]]
     then
     {
@@ -211,7 +212,7 @@ main()
         printf '%s' "${installed}"
     }
     fi
-    echo .
+    echo "-------------------------------------------------"
     if [[ -n "${not_installed}" ]]
     then
     {
@@ -219,6 +220,7 @@ main()
         printf '%s' "${not_installed}"
     }
     fi
+    echo "-------------------------------------------------"
     echo .
     echo .
     echo "It's recommended to log-off and log-on again!"
