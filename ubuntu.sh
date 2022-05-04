@@ -2,8 +2,8 @@
 #set -x
 set -euo pipefail
 
-declare installed
-declare not_installed
+installed=""
+not_installed=""
 install_chrome() 
 {
     echo Installing CHROME
