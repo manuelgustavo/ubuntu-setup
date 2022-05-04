@@ -11,6 +11,7 @@ install_chrome()
     sudo sh -c 'echo "deb https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
     sudo apt-get update -q 
     sudo apt-get install -y -q google-chrome-stable
+    printf -v installed '%sChrome\n' "${installed}"
 }
 
 set_dark_theme()
@@ -25,7 +26,7 @@ set_dark_theme()
     then
         gsettings set org.gnome.desktop.interface gtk-theme Yaru-dark # Legacy apps, can specify an accent such as Yaru-olive-dark
         gsettings set org.gnome.desktop.interface color-scheme prefer-dark # new apps
-    printf -v installed '%sDark Theme\n' "${installed}"
+        printf -v installed '%sDark Theme\n' "${installed}"
 
     else
         echo "Cannot setup theme for Ubuntu ${release}!"
@@ -52,12 +53,12 @@ install_oh_my_zsh()
         # Change the default shell
         sudo sed -i -E "s/($USER.*)(bash)/\1zsh/" /etc/passwd
         sudo update-passwd
-        printf -v installed 'oh-my-zsh\n' "${installed}"
+        printf -v installed '%soh-my-zsh\n' "${installed}"
     }
     else
     {
         echo "If you want to install oh-my-zsh, delete the ~/.oh-my-zsh directory"
-        printf -v not_installed 'oh-my-zsh\n' "${not_installed}"
+        printf -v not_installed '%soh-my-zsh\n' "${not_installed}"
     }
     fi
     #     wget --no-cache https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh
@@ -89,12 +90,12 @@ install_gnome_extensions()
                 --object-path /org/gnome/Shell/Extensions \
                 --method org.gnome.Shell.Extensions.InstallRemoteExtension \
                 "${gnome_extension}" 2>/dev/null || true
-        printf -v installed 'Gnome Extension -- Dash to Panel\n' "${installed}"
+        printf -v installed '%sGnome Extension -- Dash to Panel\n' "${installed}"
     }
     else
     {
         echo "Skipping Dash to Panel -- already installed."
-        printf -v not_installed 'Gnome Extension -- Dash to Panel\n' "${not_installed}"
+        printf -v not_installed '%sGnome Extension -- Dash to Panel\n' "${not_installed}"
     }
     fi
 
@@ -116,12 +117,12 @@ install_gnome_extensions()
             --object-path /org/gnome/Shell/Extensions \
             --method org.gnome.Shell.Extensions.InstallRemoteExtension \
             "${gnome_extension}" 2>/dev/null || true
-        printf -v installed 'Gnome Extension -- system-monitor-next\n' "${installed}"
+        printf -v installed '%sGnome Extension -- system-monitor-next\n' "${installed}"
     }
     else
     {
         echo "Skipping system-monitor-next -- already installed."
-        printf -v not_installed 'Gnome Extension -- system-monitor-next\n' "${not_installed}"
+        printf -v not_installed '%sGnome Extension -- system-monitor-next\n' "${not_installed}"
     }
     fi
 
@@ -135,12 +136,12 @@ install_gnome_extensions()
             --object-path /org/gnome/Shell/Extensions \
             --method org.gnome.Shell.Extensions.InstallRemoteExtension \
             "${gnome_extension}" 2>/dev/null || true
-        printf -v installed 'Gnome Extension -- Removable Drive\n' "${installed}"
+        printf -v installed '%sGnome Extension -- Removable Drive\n' "${installed}"
     }
     else
     {
         echo "Skipping Removable Drive Menu -- already installed."
-        printf -v not_installed 'Gnome Extension -- Removable Drive Menu\n' "${not_installed}"
+        printf -v not_installed '%sGnome Extension -- Removable Drive Menu\n' "${not_installed}"
     }
     fi
 }
@@ -164,7 +165,7 @@ install_tilix()
         echo '    source /etc/profile.d/vte.sh'
         echo 'fi'
     } >> "$HOME/.zshrc"
-    printf -v installed 'Tilix\n' "${installed}"
+    printf -v installed '%sTilix\n' "${installed}"
 }
 
 install_vscode()
@@ -184,7 +185,7 @@ install_vscode()
     sudo apt install code
     echo "Installing VSCode extensions..."
     sh -c "$(wget --no-cache -O- https://raw.githubusercontent.com/manuelgustavo/vscode-extensions/main/vscode-extensions.sh)"
-    printf -v installed 'VScode + extensions\n' "${installed}"
+    printf -v installed '%sVScode + extensions\n' "${installed}"
 }
 
 main()
