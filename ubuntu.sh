@@ -210,7 +210,7 @@ main()
     then
     {
         echo "Installed:"
-        printf '%s' "${installed}"
+        printf "${installed}"
     }
     fi
     echo "-------------------------------------------------"
@@ -218,7 +218,7 @@ main()
     then
     {
         echo "Skipped:"
-        printf '%s' "${not_installed}"
+        printf "${not_installed}"
     }
     fi
     echo "-------------------------------------------------"
