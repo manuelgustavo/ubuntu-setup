@@ -11,7 +11,7 @@ install_chrome()
     sudo sh -c 'echo "deb https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
     sudo apt-get update -q 
     sudo apt-get install -y -q google-chrome-stable
-    printf -v installed '%sChrome\n' "${installed}"
+   installed+="Chrome\n"
 }
 
 set_dark_theme()
@@ -26,11 +26,11 @@ set_dark_theme()
     then
         gsettings set org.gnome.desktop.interface gtk-theme Yaru-dark # Legacy apps, can specify an accent such as Yaru-olive-dark
         gsettings set org.gnome.desktop.interface color-scheme prefer-dark # new apps
-        printf -v installed '%sDark Theme\n' "${installed}"
+        installed+="Dark Theme\n"
 
     else
         echo "Cannot setup theme for Ubuntu ${release}!"
-        printf -v not_installed '%sDark Theme\n' "${not_installed}"
+        not_installed+="Dark Theme\n"
     fi
 }
 
@@ -53,12 +53,12 @@ install_oh_my_zsh()
         # Change the default shell
         sudo sed -i -E "s/($USER.*)(bash)/\1zsh/" /etc/passwd
         sudo update-passwd
-        printf -v installed '%soh-my-zsh\n' "${installed}"
+       installed+="oh-my-zsh\n"
     }
     else
     {
         echo "If you want to install oh-my-zsh, delete the ~/.oh-my-zsh directory"
-        printf -v not_installed '%soh-my-zsh\n' "${not_installed}"
+       not_installed+="oh-my-zsh\n"
     }
     fi
     #     wget --no-cache https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh
@@ -90,12 +90,12 @@ install_gnome_extensions()
                 --object-path /org/gnome/Shell/Extensions \
                 --method org.gnome.Shell.Extensions.InstallRemoteExtension \
                 "${gnome_extension}" 2>/dev/null || true
-        printf -v installed '%sGnome Extension -- Dash to Panel\n' "${installed}"
+       installed+="Gnome Extension -- Dash to Panel\n"
     }
     else
     {
         echo "Skipping Dash to Panel -- already installed."
-        printf -v not_installed '%sGnome Extension -- Dash to Panel\n' "${not_installed}"
+       not_installed+="Gnome Extension -- Dash to Panel\n"
     }
     fi
 
@@ -117,12 +117,12 @@ install_gnome_extensions()
             --object-path /org/gnome/Shell/Extensions \
             --method org.gnome.Shell.Extensions.InstallRemoteExtension \
             "${gnome_extension}" 2>/dev/null || true
-        printf -v installed '%sGnome Extension -- system-monitor-next\n' "${installed}"
+       installed+="Gnome Extension -- system-monitor-next\n"
     }
     else
     {
         echo "Skipping system-monitor-next -- already installed."
-        printf -v not_installed '%sGnome Extension -- system-monitor-next\n' "${not_installed}"
+       not_installed+="Gnome Extension -- system-monitor-next\n"
     }
     fi
 
@@ -136,12 +136,12 @@ install_gnome_extensions()
             --object-path /org/gnome/Shell/Extensions \
             --method org.gnome.Shell.Extensions.InstallRemoteExtension \
             "${gnome_extension}" 2>/dev/null || true
-        printf -v installed '%sGnome Extension -- Removable Drive\n' "${installed}"
+       installed+="Gnome Extension -- Removable Drive\n"
     }
     else
     {
         echo "Skipping Removable Drive Menu -- already installed."
-        printf -v not_installed '%sGnome Extension -- Removable Drive Menu\n' "${not_installed}"
+       not_installed+="Gnome Extension -- Removable Drive Menu\n"
     }
     fi
 }
@@ -165,7 +165,7 @@ install_tilix()
         echo '    source /etc/profile.d/vte.sh'
         echo 'fi'
     } >> "$HOME/.zshrc"
-    printf -v installed '%sTilix\n' "${installed}"
+   installed+="Tilix\n"
 }
 
 install_vscode()
@@ -185,7 +185,7 @@ install_vscode()
     sudo apt install code
     echo "Installing VSCode extensions..."
     sh -c "$(wget --no-cache -O- https://raw.githubusercontent.com/manuelgustavo/vscode-extensions/main/vscode-extensions.sh)"
-    printf -v installed '%sVScode + extensions\n' "${installed}"
+   installed+="VScode + extensions\n"
 }
 
 main()
