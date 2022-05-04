@@ -2,6 +2,8 @@
 #set -x
 set -euo pipefail
 
+declare installed
+declare not_installed
 install_chrome() 
 {
     echo Installing CHROME
@@ -23,28 +25,41 @@ set_dark_theme()
     then
         gsettings set org.gnome.desktop.interface gtk-theme Yaru-dark # Legacy apps, can specify an accent such as Yaru-olive-dark
         gsettings set org.gnome.desktop.interface color-scheme prefer-dark # new apps
+    printf -v installed '%s\nDark Theme' "${installed}"
+
     else
         echo "Cannot setup theme for Ubuntu ${release}!"
+        printf -v not_installed '%s\nDark Theme' "${not_installed}"
     fi
 }
 
 install_oh_my_zsh()
 {
-    echo "Installing oh-my-zsh"
-    wget --no-cache -O "$HOME/.zshrc" "https://raw.githubusercontent.com/manuelgustavo/ubuntu-setup/main/.zshrc"
-    sudo apt-get install -y -q zsh fonts-powerline
-    # chsh -s "$(which zsh)"
-    #sudo apt-get install -y -q zsh-autosuggestions zsh-syntax-highlighting
-    # install oh-my-zsh
-    rm -fr "$HOME/.oh-my-zsh"
-    sh -c "$(wget --no-cache -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended --skip-chsh --keep-zshrc"
-    git clone --quiet --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-    git clone --quiet --depth 1 https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-    
-    # Change the default shell
-    sudo sed -i -E "s/($USER.*)(bash)/\1zsh/" /etc/passwd
-    sudo update-passwd
-
+    if [[ ! -d "$HOME/.oh-my-zsh" ]]
+    then
+    {
+        echo "Installing oh-my-zsh"
+        wget --no-cache -O "$HOME/.zshrc" "https://raw.githubusercontent.com/manuelgustavo/ubuntu-setup/main/.zshrc"
+        sudo apt-get install -y -q zsh fonts-powerline
+        # chsh -s "$(which zsh)"
+        #sudo apt-get install -y -q zsh-autosuggestions zsh-syntax-highlighting
+        # install oh-my-zsh
+        rm -fr "$HOME/.oh-my-zsh"
+        sh -c "$(wget --no-cache -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended --skip-chsh --keep-zshrc"
+        git clone --quiet --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+        git clone --quiet --depth 1 https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+        
+        # Change the default shell
+        sudo sed -i -E "s/($USER.*)(bash)/\1zsh/" /etc/passwd
+        sudo update-passwd
+        printf -v installed '%s\noh-my-zsh' "${installed}"
+    }
+    else
+    {
+        echo "If you want to install oh-my-zsh, delete the ~/.oh-my-zsh directory"
+        printf -v not_installed '%s\noh-my-zsh' "${not_installed}"
+    }
+    fi
     #     wget --no-cache https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh
     # sed -i.tmp 's:env zsh::g' install.sh
     # sed -i.tmp 's:chsh -s .*$::g' install.sh
@@ -74,10 +89,12 @@ install_gnome_extensions()
                 --object-path /org/gnome/Shell/Extensions \
                 --method org.gnome.Shell.Extensions.InstallRemoteExtension \
                 "${gnome_extension}" 2>/dev/null || true
+        printf -v installed '%s\nGnome Extension -- Dash to Panel' "${installed}"
     }
     else
     {
-        echo "Dash to Panel already installed."
+        echo "Skipping Dash to Panel -- already installed."
+        printf -v not_installed '%s\nGnome Extension -- Dash to Panel' "${not_installed}"
     }
     fi
 
@@ -99,10 +116,12 @@ install_gnome_extensions()
             --object-path /org/gnome/Shell/Extensions \
             --method org.gnome.Shell.Extensions.InstallRemoteExtension \
             "${gnome_extension}" 2>/dev/null || true
+        printf -v installed '%s\nGnome Extension -- system-monitor-next' "${installed}"
     }
     else
     {
-        echo "system-monitor-next already installed."
+        echo "Skipping system-monitor-next -- already installed."
+        printf -v not_installed '%s\nGnome Extension -- system-monitor-next' "${not_installed}"
     }
     fi
 
@@ -116,10 +135,12 @@ install_gnome_extensions()
             --object-path /org/gnome/Shell/Extensions \
             --method org.gnome.Shell.Extensions.InstallRemoteExtension \
             "${gnome_extension}" 2>/dev/null || true
+        printf -v installed '%s\nGnome Extension -- Removable Drive' "${installed}"
     }
     else
     {
-        echo "Removable Drive Menu already installed."
+        echo "Skipping Removable Drive Menu -- already installed."
+        printf -v not_installed '%s\nGnome Extension -- Removable Drive Menu' "${not_installed}"
     }
     fi
 }
@@ -143,6 +164,7 @@ install_tilix()
         echo '    source /etc/profile.d/vte.sh'
         echo 'fi'
     } >> "$HOME/.zshrc"
+    printf -v installed '%s\nTilix' "${installed}"
 }
 
 install_vscode()
@@ -162,6 +184,7 @@ install_vscode()
     sudo apt install code
     echo "Installing VSCode extensions..."
     sh -c "$(wget --no-cache -O- https://raw.githubusercontent.com/manuelgustavo/vscode-extensions/main/vscode-extensions.sh)"
+    printf -v installed '%s\nVScode + extensions' "${installed}"
 }
 
 main()
@@ -179,7 +202,25 @@ main()
     echo .
     echo .
     echo .
-    echo "INSTALLATION SUCCESSFUL!"
+    echo "SCRIPT SUCCESS!"
+    echo .
+    if [[ -z "${installed}" ]]
+    then
+    {
+        echo "Installed:"
+        echo "${installed}"
+    }
+    fi
+    echo .
+    if [[ -z "${not_installed}" ]]
+    then
+    {
+        echo "Skipped:"
+        echo "${not_installed}"
+    }
+    fi
+    echo .
+    echo .
     echo "It's recommended to log-off and log-on again!"
 }
 
