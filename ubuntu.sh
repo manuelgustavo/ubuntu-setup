@@ -25,11 +25,11 @@ set_dark_theme()
     then
         gsettings set org.gnome.desktop.interface gtk-theme Yaru-dark # Legacy apps, can specify an accent such as Yaru-olive-dark
         gsettings set org.gnome.desktop.interface color-scheme prefer-dark # new apps
-    printf -v installed '%s\nDark Theme' "${installed}"
+    printf -v installed '%sDark Theme\n' "${installed}"
 
     else
         echo "Cannot setup theme for Ubuntu ${release}!"
-        printf -v not_installed '%s\nDark Theme' "${not_installed}"
+        printf -v not_installed '%sDark Theme\n' "${not_installed}"
     fi
 }
 
@@ -52,12 +52,12 @@ install_oh_my_zsh()
         # Change the default shell
         sudo sed -i -E "s/($USER.*)(bash)/\1zsh/" /etc/passwd
         sudo update-passwd
-        printf -v installed '%s\noh-my-zsh' "${installed}"
+        printf -v installed '%s\noh-my-zsh\n' "${installed}"
     }
     else
     {
         echo "If you want to install oh-my-zsh, delete the ~/.oh-my-zsh directory"
-        printf -v not_installed '%s\noh-my-zsh' "${not_installed}"
+        printf -v not_installed '%s\noh-my-zsh\n' "${not_installed}"
     }
     fi
     #     wget --no-cache https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh
@@ -89,12 +89,12 @@ install_gnome_extensions()
                 --object-path /org/gnome/Shell/Extensions \
                 --method org.gnome.Shell.Extensions.InstallRemoteExtension \
                 "${gnome_extension}" 2>/dev/null || true
-        printf -v installed '%s\nGnome Extension -- Dash to Panel' "${installed}"
+        printf -v installed '%s\nGnome Extension -- Dash to Panel\n' "${installed}"
     }
     else
     {
         echo "Skipping Dash to Panel -- already installed."
-        printf -v not_installed '%s\nGnome Extension -- Dash to Panel' "${not_installed}"
+        printf -v not_installed '%s\nGnome Extension -- Dash to Panel\n' "${not_installed}"
     }
     fi
 
@@ -116,12 +116,12 @@ install_gnome_extensions()
             --object-path /org/gnome/Shell/Extensions \
             --method org.gnome.Shell.Extensions.InstallRemoteExtension \
             "${gnome_extension}" 2>/dev/null || true
-        printf -v installed '%s\nGnome Extension -- system-monitor-next' "${installed}"
+        printf -v installed '%s\nGnome Extension -- system-monitor-next\n' "${installed}"
     }
     else
     {
         echo "Skipping system-monitor-next -- already installed."
-        printf -v not_installed '%s\nGnome Extension -- system-monitor-next' "${not_installed}"
+        printf -v not_installed '%s\nGnome Extension -- system-monitor-next\n' "${not_installed}"
     }
     fi
 
@@ -135,12 +135,12 @@ install_gnome_extensions()
             --object-path /org/gnome/Shell/Extensions \
             --method org.gnome.Shell.Extensions.InstallRemoteExtension \
             "${gnome_extension}" 2>/dev/null || true
-        printf -v installed '%s\nGnome Extension -- Removable Drive' "${installed}"
+        printf -v installed '%s\nGnome Extension -- Removable Drive\n' "${installed}"
     }
     else
     {
         echo "Skipping Removable Drive Menu -- already installed."
-        printf -v not_installed '%s\nGnome Extension -- Removable Drive Menu' "${not_installed}"
+        printf -v not_installed '%s\nGnome Extension -- Removable Drive Menu\n' "${not_installed}"
     }
     fi
 }
@@ -164,7 +164,7 @@ install_tilix()
         echo '    source /etc/profile.d/vte.sh'
         echo 'fi'
     } >> "$HOME/.zshrc"
-    printf -v installed '%s\nTilix' "${installed}"
+    printf -v installed '%s\nTilix\n' "${installed}"
 }
 
 install_vscode()
@@ -184,7 +184,7 @@ install_vscode()
     sudo apt install code
     echo "Installing VSCode extensions..."
     sh -c "$(wget --no-cache -O- https://raw.githubusercontent.com/manuelgustavo/vscode-extensions/main/vscode-extensions.sh)"
-    printf -v installed '%s\nVScode + extensions' "${installed}"
+    printf -v installed '%s\nVScode + extensions\n' "${installed}"
 }
 
 main()
@@ -204,19 +204,19 @@ main()
     echo .
     echo "SCRIPT SUCCESS!"
     echo .
-    if [[ -z "${installed}" ]]
+    if [[ -n "${installed}" ]]
     then
     {
         echo "Installed:"
-        echo "${installed}"
+        printf '%s' "${installed}"
     }
     fi
     echo .
-    if [[ -z "${not_installed}" ]]
+    if [[ -n "${not_installed}" ]]
     then
     {
         echo "Skipped:"
-        echo "${not_installed}"
+        printf '%s' "${not_installed}"
     }
     fi
     echo .
