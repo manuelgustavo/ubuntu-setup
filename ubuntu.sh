@@ -127,7 +127,7 @@ install_gnome_extensions()
 install_tilix()
 {
     sudo apt-get -y -q install tilix
-    wget --no-cache -O- "https://raw.githubusercontent.com/manuelgustavo/ubuntu-setup/main/tilix.conf" | dconf load /com/gexperts/Tilix/
+    wget --no-cache -O- "https://raw.githubusercontent.com/manuelgustavo/ubuntu-setup/main/tilix_rosipov.conf" | dconf load /com/gexperts/Tilix/
     # dconf dump /com/gexperts/Tilix/
     # Install Powerline Droid Sans Mono Dotted.
     mkdir -p "$HOME/.local/share/fonts"
