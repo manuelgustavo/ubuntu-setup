@@ -1,0 +1,35 @@
+# ~/.gitconfig
+[alias]
+	st = status --short
+[diff]
+	tool = bc3
+	guitool = bc3
+[merge]
+	tool = bc3
+	guitool = bc3
+[core]
+	preloadindex = true
+	fscache = true
+	filemode = false
+#	autocrlf = true
+	editor = vim
+[gc]
+	auto = 256
+[pull]
+	rebase = false
+[fetch]
+	prune = false
+[rebase]
+	autoStash = false
+[difftool "bc3"]
+	trustExitCode = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[includeIf "gitdir:~/repo/"]
+	path = .gitconfig-repo
+[includeIf "gitdir:~/personal/"]
+	path = .gitconfig-personal
