@@ -11,7 +11,7 @@ install_chrome()
     sudo sh -c 'echo "deb https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
     sudo apt-get update -q 
     sudo apt-get install -y -q google-chrome-stable
-   installed+="Chrome\n"
+    installed+="Chrome\n"
 }
 
 set_dark_theme()
@@ -53,12 +53,12 @@ install_oh_my_zsh()
         # Change the default shell
         sudo sed -i -E "s/($USER.*)(bash)/\1zsh/" /etc/passwd
         sudo update-passwd
-       installed+="oh-my-zsh\n"
+        installed+="oh-my-zsh\n"
     }
     else
     {
         echo "If you want to install oh-my-zsh, delete the ~/.oh-my-zsh directory"
-       not_installed+="oh-my-zsh\n"
+        not_installed+="oh-my-zsh\n"
     }
     fi
     #     wget --no-cache https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh
@@ -90,12 +90,12 @@ install_gnome_extensions()
                 --object-path /org/gnome/Shell/Extensions \
                 --method org.gnome.Shell.Extensions.InstallRemoteExtension \
                 "${gnome_extension}" 2>/dev/null || true
-       installed+="Gnome Extension -- Dash to Panel\n"
+        installed+="Gnome Extension -- Dash to Panel\n"
     }
     else
     {
         echo "Skipping Dash to Panel -- already installed."
-       not_installed+="Gnome Extension -- Dash to Panel\n"
+        not_installed+="Gnome Extension -- Dash to Panel\n"
     }
     fi
 
@@ -117,12 +117,12 @@ install_gnome_extensions()
             --object-path /org/gnome/Shell/Extensions \
             --method org.gnome.Shell.Extensions.InstallRemoteExtension \
             "${gnome_extension}" 2>/dev/null || true
-       installed+="Gnome Extension -- system-monitor-next\n"
+        installed+="Gnome Extension -- system-monitor-next\n"
     }
     else
     {
         echo "Skipping system-monitor-next -- already installed."
-       not_installed+="Gnome Extension -- system-monitor-next\n"
+        not_installed+="Gnome Extension -- system-monitor-next\n"
     }
     fi
 
@@ -136,12 +136,12 @@ install_gnome_extensions()
             --object-path /org/gnome/Shell/Extensions \
             --method org.gnome.Shell.Extensions.InstallRemoteExtension \
             "${gnome_extension}" 2>/dev/null || true
-       installed+="Gnome Extension -- Removable Drive\n"
+        installed+="Gnome Extension -- Removable Drive\n"
     }
     else
     {
         echo "Skipping Removable Drive Menu -- already installed."
-       not_installed+="Gnome Extension -- Removable Drive Menu\n"
+        not_installed+="Gnome Extension -- Removable Drive Menu\n"
     }
     fi
 }
@@ -165,7 +165,7 @@ install_tilix()
         echo '    source /etc/profile.d/vte.sh'
         echo 'fi'
     } >> "$HOME/.zshrc"
-   installed+="Tilix\n"
+    installed+="Tilix\n"
 }
 
 install_vscode()
@@ -185,7 +185,7 @@ install_vscode()
     sudo apt install code
     echo "Installing VSCode extensions..."
     sh -c "$(wget --no-cache -O- https://raw.githubusercontent.com/manuelgustavo/vscode-extensions/main/vscode-extensions.sh)"
-   installed+="VScode + extensions\n"
+    installed+="VScode + extensions\n"
 }
 
 main()
