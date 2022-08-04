@@ -173,16 +173,16 @@ install_vscode()
     echo "Installing VSCode"
     declare temp="$(mktemp -d)"
     cd "${temp}"
-    sudo apt-get install gpg
+    sudo apt-get install -y gpg
     wget --no-cache -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
     sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
     sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
     rm -f packages.microsoft.gpg
     cd -
     rm -fr "${temp}"
-    sudo apt install apt-transport-https
-    sudo apt update
-    sudo apt install code
+    sudo apt-get install -y apt-transport-https
+    sudo apt-get update
+    sudo apt-get install code
     echo "Installing VSCode extensions..."
     sh -c "$(wget --no-cache -O- https://raw.githubusercontent.com/manuelgustavo/vscode-extensions/main/vscode-extensions.sh)"
     installed+="VScode + extensions\n"
@@ -190,8 +190,8 @@ install_vscode()
 
 main()
 {
-    sudo apt update -q 
-    sudo apt install -y -q git wget
+    sudo apt-get update -q 
+    sudo apt-get install -y -q git wget
 
     install_gnome_extensions
     install_chrome
