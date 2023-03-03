@@ -49,6 +49,7 @@ install_oh_my_zsh()
         sh -c "$(wget --no-cache -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended --skip-chsh --keep-zshrc"
         git clone --quiet --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
         git clone --quiet --depth 1 https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+        git@github.com:manuelgustavo/ubuntu-setup.git
         
         # Change the default shell
         sudo sed -i -E "s/($USER.*)(bash)/\1zsh/" /etc/passwd

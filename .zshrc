@@ -71,7 +71,7 @@ ZSH_THEME="agnoster"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 # plugins=(z git bundler dotenv zsh-autosuggestions autojump command-not-found zsh-syntax-highlighting)
-plugins=(z bundler dotenv zsh-autosuggestions command-not-found zsh-syntax-highlighting)
+plugins=(z bundler dotenv zsh-autosuggestions command-not-found git-open zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
