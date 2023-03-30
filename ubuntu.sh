@@ -4,14 +4,16 @@ set -euo pipefail
 
 installed=""
 not_installed=""
-install_chrome() 
+
+install_brave()
 {
-    echo Installing CHROME
-    wget --no-cache -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
-    sudo sh -c 'echo "deb https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-    sudo apt-get update -q 
-    sudo apt-get install -y -q google-chrome-stable
-    installed+="Chrome\n"
+    echo Installing BRAVE
+    sudo apt-get install -y curl
+    sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+    echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+    sudo apt-get update -y -q
+    sudo apt-get install -y -q brave-browser
+    installed+="Brave\n"
 }
 
 set_dark_theme()
@@ -195,7 +197,7 @@ main()
     sudo apt-get install -y -q git wget
 
     install_gnome_extensions
-    install_chrome
+    install_brave
     set_dark_theme
     install_oh_my_zsh
     install_tilix
