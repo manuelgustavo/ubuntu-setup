@@ -10,13 +10,6 @@ Running it in 1 line:
 sudo apt-get update && sudo apt-get install -y -q wget && /bin/bash -c "$(wget --no-cache -O- https://raw.githubusercontent.com/manuelgustavo/ubuntu-setup/main/ubuntu.sh)"
 ```
 
-Post installation, for panel transparency (or via Dash To Panel's extension settings).
-
-``` bash
-dconf write /org/gnome/shell/extensions/dash-to-panel/trans-use-custom-opacity true
-dconf write /org/gnome/shell/extensions/dash-to-panel/trans-panel-opacity 0.4
-```
-
 ## Visual changes
 
 ### Dark Theme

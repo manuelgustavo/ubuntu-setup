@@ -8,11 +8,11 @@ not_installed=""
 install_brave()
 {
     echo Installing BRAVE
-    sudo apt-get install -y curl
+    sudo apt install curl
     sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
-    echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
-    sudo apt-get update -y -q
-    sudo apt-get install -y -q brave-browser
+    sudo curl -fsSLo /etc/apt/sources.list.d/brave-browser-release.sources https://brave-browser-apt-release.s3.brave.com/brave-browser.sources
+    sudo apt update -y -q
+    sudo apt install -y -q brave-browser 
     installed+="Brave\n"
 }
 
@@ -24,7 +24,7 @@ set_dark_theme()
     if [[ "${release}" = "20.04" ]]
     then
         gsettings set org.gnome.desktop.interface gtk-theme 'Yaru-dark'
-    elif [[ "${release}" = "22.04" ]]
+    elif [[ "${release}" = "22.04" ]] || [[ "${release}" = "24.04" ]]
     then
         gsettings set org.gnome.desktop.interface gtk-theme Yaru-dark # Legacy apps, can specify an accent such as Yaru-olive-dark
         gsettings set org.gnome.desktop.interface color-scheme prefer-dark # new apps
@@ -94,6 +94,8 @@ install_gnome_extensions()
                 --method org.gnome.Shell.Extensions.InstallRemoteExtension \
                 "${gnome_extension}" 2>/dev/null || true
         installed+="Gnome Extension -- Dash to Panel\n"
+        dconf write /org/gnome/shell/extensions/dash-to-panel/trans-use-custom-opacity true
+        dconf write /org/gnome/shell/extensions/dash-to-panel/trans-panel-opacity 0.4
     }
     else
     {
