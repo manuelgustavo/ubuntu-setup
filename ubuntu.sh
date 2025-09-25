@@ -141,6 +141,7 @@ install_gnome_extensions()
     {
         echo "Installing Gnome Extension -- Burn My Windows https://extensions.gnome.org/extension/7/removable-drive-menu/"
         install_extension "${gnome_extension}"
+        mkdir -p "$HOME/.config/burn-my-windows/profiles"
         echo "[burn-my-windows-profile]" > "$HOME/.config/burn-my-windows/profiles/1758807011312850.conf"
         echo "fire-enable-effect=false" >> "$HOME/.config/burn-my-windows/profiles/1758807011312850.conf"
         echo "glitch-enable-effect=true" >> "$HOME/.config/burn-my-windows/profiles/1758807011312850.conf"
