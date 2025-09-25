@@ -149,7 +149,6 @@ install_gnome_extensions()
         echo "tv-enable-effect=true" >> "$HOME/.config/burn-my-windows/profiles/1758807011312850.conf"
         echo "tv-glitch-enable-effect=true" >> "$HOME/.config/burn-my-windows/profiles/1758807011312850.conf"
         echo "tv-glitch-animation-time=400" >> "$HOME/.config/burn-my-windows/profiles/1758807011312850.conf"
-        dconf write /org/gnome/shell/extensions/burn-my-windows/active-profile "$HOME/.config/burn-my-windows/profiles/1758807011312850.conf"
         installed+="Gnome Extension -- Burn My Windows\n"
     }
     else
