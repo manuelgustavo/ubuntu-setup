@@ -64,10 +64,6 @@ install_oh_my_zsh()
         not_installed+="oh-my-zsh\n"
     }
     fi
-    #     wget --no-cache https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh
-    # sed -i.tmp 's:env zsh::g' install.sh
-    # sed -i.tmp 's:chsh -s .*$::g' install.sh
-    # sh install.sh
 }
 
 install_gnome_extensions()
@@ -103,14 +99,6 @@ install_gnome_extensions()
         not_installed+="Gnome Extension -- Dash to Panel\n"
     }
     fi
-
-    # TODO: The below needs to be re-enabled when made available!
-    # echo "Installing Gnome Extension -- system-monitor https://extensions.gnome.org/extension/120/system-monitor/"
-    # gdbus call --session \
-    #            --dest org.gnome.Shell.Extensions \
-    #            --object-path /org/gnome/Shell/Extensions \
-    #            --method org.gnome.Shell.Extensions.InstallRemoteExtension \
-    #            "system-monitor@paradoxxx.zero.gmail.com" 2>/dev/null
 
     gnome_extension="system-monitor-next@paradoxxx.zero.gmail.com"
     if [[ ! -d "$HOME/.local/share/gnome-shell/extensions/${gnome_extension}" ]]
@@ -176,18 +164,10 @@ install_tilix()
 install_vscode()
 {
     echo "Installing VSCode"
-    declare temp="$(mktemp -d)"
-    cd "${temp}"
-    sudo apt-get install -y gpg
-    wget --no-cache -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-    sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
-    sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
-    rm -f packages.microsoft.gpg
-    cd -
-    rm -fr "${temp}"
-    sudo apt-get install -y apt-transport-https
-    sudo apt-get update
-    sudo apt-get install code
+    echo "code code/add-microsoft-repo boolean true" | sudo debconf-set-selections
+    sudo apt install apt-transport-https
+    sudo apt update
+    sudo apt install code # or code-insiders
     echo "Installing VSCode extensions..."
     sh -c "$(wget --no-cache -O- https://raw.githubusercontent.com/manuelgustavo/vscode-extensions/main/vscode-extensions.sh)"
     installed+="VScode + extensions\n"
