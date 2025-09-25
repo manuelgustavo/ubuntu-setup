@@ -66,6 +66,15 @@ install_oh_my_zsh()
     fi
 }
 
+install_extension()
+{
+    gdbus call --session \
+                --dest org.gnome.Shell.Extensions \
+                --object-path /org/gnome/Shell/Extensions \
+                --method org.gnome.Shell.Extensions.InstallRemoteExtension \
+                "${1}" 2>/dev/null || true
+}
+
 install_gnome_extensions()
 {
     sudo apt-get install -y -q \
@@ -84,14 +93,10 @@ install_gnome_extensions()
     then
     {
         echo "Installing Gnome Extension -- Dash to Panel https://extensions.gnome.org/extension/1160/dash-to-panel/"
-        gdbus call --session \
-                --dest org.gnome.Shell.Extensions \
-                --object-path /org/gnome/Shell/Extensions \
-                --method org.gnome.Shell.Extensions.InstallRemoteExtension \
-                "${gnome_extension}" 2>/dev/null || true
-        installed+="Gnome Extension -- Dash to Panel\n"
+        install_extension "${gnome_extension}"
         dconf write /org/gnome/shell/extensions/dash-to-panel/trans-use-custom-opacity true
         dconf write /org/gnome/shell/extensions/dash-to-panel/trans-panel-opacity 0.4
+        installed+="Gnome Extension -- Dash to Panel\n"
     }
     else
     {
@@ -105,11 +110,7 @@ install_gnome_extensions()
     then
     {
         echo "Installing Gnome Extension -- system-monitor-next https://extensions.gnome.org/extension/3010/system-monitor-next/"
-        gdbus call --session \
-            --dest org.gnome.Shell.Extensions \
-            --object-path /org/gnome/Shell/Extensions \
-            --method org.gnome.Shell.Extensions.InstallRemoteExtension \
-            "${gnome_extension}" 2>/dev/null || true
+        install_extension "${gnome_extension}"
         installed+="Gnome Extension -- system-monitor-next\n"
     }
     else
@@ -124,17 +125,51 @@ install_gnome_extensions()
     then
     {
         echo "Installing Gnome Extension -- Removable Drive Menu https://extensions.gnome.org/extension/7/removable-drive-menu/"
-        gdbus call --session \
-            --dest org.gnome.Shell.Extensions \
-            --object-path /org/gnome/Shell/Extensions \
-            --method org.gnome.Shell.Extensions.InstallRemoteExtension \
-            "${gnome_extension}" 2>/dev/null || true
-        installed+="Gnome Extension -- Removable Drive\n"
+        install_extension "${gnome_extension}"
+        installed+="Gnome Extension -- Removable Drive Menu\n"
     }
     else
     {
         echo "Skipping Removable Drive Menu -- already installed."
         not_installed+="Gnome Extension -- Removable Drive Menu\n"
+    }
+    fi
+
+    gnome_extension="burn-my-windows@schneegans.github.com"
+    if [[ ! -d "$HOME/.local/share/gnome-shell/extensions/${gnome_extension}" ]]
+    then
+    {
+        echo "Installing Gnome Extension -- Burn My Windows https://extensions.gnome.org/extension/7/removable-drive-menu/"
+        install_extension "${gnome_extension}"
+        echo "[burn-my-windows-profile]" > "$HOME/.config/burn-my-windows/profiles/1758807011312850.conf"
+        echo "fire-enable-effect=false" >> "$HOME/.config/burn-my-windows/profiles/1758807011312850.conf"
+        echo "glitch-enable-effect=true" >> "$HOME/.config/burn-my-windows/profiles/1758807011312850.conf"
+        echo "glitch-animation-time=400" >> "$HOME/.config/burn-my-windows/profiles/1758807011312850.conf"
+        echo "tv-enable-effect=true" >> "$HOME/.config/burn-my-windows/profiles/1758807011312850.conf"
+        echo "tv-glitch-enable-effect=true" >> "$HOME/.config/burn-my-windows/profiles/1758807011312850.conf"
+        echo "tv-glitch-animation-time=400" >> "$HOME/.config/burn-my-windows/profiles/1758807011312850.conf"
+        dconf write /org/gnome/shell/extensions/burn-my-windows/active-profile "$HOME/.config/burn-my-windows/profiles/1758807011312850.conf"
+        installed+="Gnome Extension -- Burn My Windows\n"
+    }
+    else
+    {
+        echo "Skipping Burn My Windows -- already installed."
+        not_installed+="Gnome Extension -- Burn My Windows\n"
+    }
+    fi
+
+    gnome_extension="arcmenu@arcmenu.com"
+    if [[ ! -d "$HOME/.local/share/gnome-shell/extensions/${gnome_extension}" ]]
+    then
+    {
+        echo "Installing Gnome Extension -- ArcMenu https://extensions.gnome.org/extension/7/removable-drive-menu/"
+        install_extension "${gnome_extension}"
+        installed+="Gnome Extension -- ArcMenu\n"
+    }
+    else
+    {
+        echo "Skipping ArcMenu -- already installed."
+        not_installed+="Gnome Extension -- ArcMenu\n"
     }
     fi
 }
@@ -164,18 +199,10 @@ install_tilix()
 install_vscode()
 {
     echo "Installing VSCode"
-    declare temp="$(mktemp -d)"
-    cd "${temp}"
-    sudo apt-get install -y gpg
-    wget --no-cache -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-    sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
-    sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
-    rm -f packages.microsoft.gpg
-    cd -
-    rm -fr "${temp}"
-    sudo apt-get install -q -y apt-transport-https
-    sudo apt-get update -q
-    sudo apt-get install -q -y code
+    echo "code code/add-microsoft-repo boolean true" | sudo debconf-set-selections
+    sudo apt install apt-transport-https
+    sudo apt update
+    sudo apt install code # or code-insiders
     echo "Installing VSCode extensions..."
     sh -c "$(wget --no-cache -O- https://raw.githubusercontent.com/manuelgustavo/vscode-extensions/main/vscode-extensions.sh)"
     installed+="VScode + extensions\n"
