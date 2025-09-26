@@ -1,6 +1,6 @@
 # ubuntu-setup v1.1
 
-> Tested against Ubuntu 20.04 and 22.04.
+> Tested against Ubuntu 20.04, 22.04 Aand 24.04.
 
 The **bash** script `ubuntu.sh` is designed to offer minimal user interaction and install the following on Ubuntu.
 
