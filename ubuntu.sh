@@ -144,7 +144,7 @@ install_gnome_extensions()
     if [[ ! -d "$HOME/.local/share/gnome-shell/extensions/${gnome_extension}" ]]
     then
     {
-        echo "Installing Gnome Extension -- Burn My Windows https://extensions.gnome.org/extension/7/removable-drive-menu/"
+        echo "Installing Gnome Extension -- Burn My Windows https://extensions.gnome.org/extension/4679/burn-my-windows/"
         install_extension "${gnome_extension}"
         mkdir -p "$HOME/.config/burn-my-windows/profiles"
         echo "[burn-my-windows-profile]" > "$HOME/.config/burn-my-windows/profiles/1758807011312850.conf"
@@ -167,7 +167,7 @@ install_gnome_extensions()
     if [[ ! -d "$HOME/.local/share/gnome-shell/extensions/${gnome_extension}" ]]
     then
     {
-        echo "Installing Gnome Extension -- ArcMenu https://extensions.gnome.org/extension/7/removable-drive-menu/"
+        echo "Installing Gnome Extension -- ArcMenu https://extensions.gnome.org/extension/3628/arcmenu/"
         install_extension "${gnome_extension}"
         installed+="Gnome Extension -- ArcMenu\n"
     }
@@ -175,6 +175,36 @@ install_gnome_extensions()
     {
         echo "Skipping ArcMenu -- already installed."
         not_installed+="Gnome Extension -- ArcMenu\n"
+    }
+    fi
+
+    gnome_extension="no-overview@fthx"
+    if [[ ! -d "$HOME/.local/share/gnome-shell/extensions/${gnome_extension}" ]]
+    then
+    {
+        echo "Installing Gnome Extension -- No overview at start-up https://extensions.gnome.org/extension/4099/no-overview/"
+        install_extension "${gnome_extension}"
+        installed+="Gnome Extension -- No overview at start-up\n"
+    }
+    else
+    {
+        echo "Skipping No overview at start-up -- already installed."
+        not_installed+="Gnome Extension -- No overview at start-up\n"
+    }
+    fi
+
+    gnome_extension="CoverflowAltTab@palatis.blogspot.com"
+    if [[ ! -d "$HOME/.local/share/gnome-shell/extensions/${gnome_extension}" ]]
+    then
+    {
+        echo "Installing Coverflow Alt-Tab -- No overview at start-up https://extensions.gnome.org/extension/4099/no-overview/"
+        install_extension "${gnome_extension}"
+        installed+="Gnome Extension -- Coverflow Alt-Tab\n"
+    }
+    else
+    {
+        echo "Skipping Coverflow Alt-Tab -- already installed."
+        not_installed+="Gnome Extension -- Coverflow Alt-Tab\n"
     }
     fi
 }
