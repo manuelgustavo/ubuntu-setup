@@ -199,10 +199,18 @@ install_tilix()
 install_vscode()
 {
     echo "Installing VSCode"
-    echo "code code/add-microsoft-repo boolean true" | sudo debconf-set-selections
-    sudo apt install apt-transport-https
-    sudo apt update
-    sudo apt install code # or code-insiders
+    declare temp="$(mktemp -d)"
+    cd "${temp}"
+    sudo apt-get install -y gpg
+    wget --no-cache -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+    sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
+    sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+    rm -f packages.microsoft.gpg
+    cd -
+    rm -fr "${temp}"
+    sudo apt-get install -y apt-transport-https
+    sudo apt-get update
+    sudo apt-get install code
     echo "Installing VSCode extensions..."
     sh -c "$(wget --no-cache -O- https://raw.githubusercontent.com/manuelgustavo/vscode-extensions/main/vscode-extensions.sh)"
     installed+="VScode + extensions\n"
