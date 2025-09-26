@@ -7,13 +7,19 @@ not_installed=""
 
 install_brave()
 {
-    echo Installing BRAVE
-    sudo apt install curl
-    sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
-    sudo curl -fsSLo /etc/apt/sources.list.d/brave-browser-release.sources https://brave-browser-apt-release.s3.brave.com/brave-browser.sources
-    sudo apt update -y -q
-    sudo apt install -y -q brave-browser 
-    installed+="Brave\n"
+    local app_name="brave-browser"
+    if command -v "$app_name" &> /dev/null; then
+        echo "Skipping Brave -- already installed."
+        not_installed+="Brave\n"
+    else
+        echo Installing Brave
+        sudo apt install curl
+        sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+        sudo curl -fsSLo /etc/apt/sources.list.d/brave-browser-release.sources https://brave-browser-apt-release.s3.brave.com/brave-browser.sources
+        sudo apt update -y -q
+        sudo apt install -y -q brave-browser 
+        installed+="Brave\n"
+    fi
 }
 
 set_dark_theme()
@@ -29,7 +35,6 @@ set_dark_theme()
         gsettings set org.gnome.desktop.interface gtk-theme Yaru-dark # Legacy apps, can specify an accent such as Yaru-olive-dark
         gsettings set org.gnome.desktop.interface color-scheme prefer-dark # new apps
         installed+="Dark Theme\n"
-
     else
         echo "Cannot setup theme for Ubuntu ${release}!"
         not_installed+="Dark Theme\n"
@@ -176,44 +181,56 @@ install_gnome_extensions()
 
 install_tilix()
 {
-    sudo apt-get -y -q install tilix
-    wget --no-cache -O- "https://raw.githubusercontent.com/manuelgustavo/ubuntu-setup/main/tilix_rosipov-grey-ld.conf" | dconf load /com/gexperts/Tilix/
-    # dconf dump /com/gexperts/Tilix/ >[filename.conf]
-    # Install Powerline Droid Sans Mono Dotted.
-    mkdir -p "$HOME/.local/share/fonts"
-    wget --no-cache -O "$HOME/.local/share/fonts/Droid Sans Mono Dotted for Powerline.ttf" "https://raw.githubusercontent.com/powerline/fonts/master/DroidSansMonoDotted/Droid%20Sans%20Mono%20Dotted%20for%20Powerline.ttf"
-    fc-cache -f
-    sudo update-alternatives --set x-terminal-emulator /usr/bin/tilix.wrapper
-    
-    sudo ln -s /etc/profile.d/vte-2.91.sh /etc/profile.d/vte.sh || true
-    
-    { 
-        echo
-        echo 'if [ $TILIX_ID ] || [ $VTE_VERSION ]; then'
-        echo '    source /etc/profile.d/vte.sh'
-        echo 'fi'
-    } >> "$HOME/.zshrc"
-    installed+="Tilix\n"
+    local app_name="tilix"
+    if command -v "$app_name" &> /dev/null; then
+        echo "Skipping Tilix -- already installed."
+        not_installed+="Tilix\n"
+    else
+        sudo apt-get -y -q install tilix
+        wget --no-cache -O- "https://raw.githubusercontent.com/manuelgustavo/ubuntu-setup/main/tilix_rosipov-grey-ld.conf" | dconf load /com/gexperts/Tilix/
+        # dconf dump /com/gexperts/Tilix/ >[filename.conf]
+        # Install Powerline Droid Sans Mono Dotted.
+        mkdir -p "$HOME/.local/share/fonts"
+        wget --no-cache -O "$HOME/.local/share/fonts/Droid Sans Mono Dotted for Powerline.ttf" "https://raw.githubusercontent.com/powerline/fonts/master/DroidSansMonoDotted/Droid%20Sans%20Mono%20Dotted%20for%20Powerline.ttf"
+        fc-cache -f
+        sudo update-alternatives --set x-terminal-emulator /usr/bin/tilix.wrapper
+        
+        sudo ln -s /etc/profile.d/vte-2.91.sh /etc/profile.d/vte.sh || true
+        
+        { 
+            echo
+            echo 'if [ $TILIX_ID ] || [ $VTE_VERSION ]; then'
+            echo '    source /etc/profile.d/vte.sh'
+            echo 'fi'
+        } >> "$HOME/.zshrc"
+        installed+="Tilix\n"
+    fi
 }
 
 install_vscode()
 {
-    echo "Installing VSCode"
-    declare temp="$(mktemp -d)"
-    cd "${temp}"
-    sudo apt-get install -y gpg
-    wget --no-cache -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-    sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
-    sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
-    rm -f packages.microsoft.gpg
-    cd -
-    rm -fr "${temp}"
-    sudo apt-get install -y apt-transport-https
-    sudo apt-get update
-    sudo apt-get install code
-    echo "Installing VSCode extensions..."
-    sh -c "$(wget --no-cache -O- https://raw.githubusercontent.com/manuelgustavo/vscode-extensions/main/vscode-extensions.sh)"
-    installed+="VScode + extensions\n"
+    local app_name="code"
+    if command -v "$app_name" &> /dev/null; then
+        echo "Skipping VSCode -- already installed."
+        not_installed+="VScode + extensions\n"
+    else
+        echo "Installing VSCode"
+        declare temp="$(mktemp -d)"
+        cd "${temp}"
+        sudo apt-get install -y gpg
+        wget --no-cache -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+        sudo install -o root -g root -m 644 packages.microsoft.gpg /etc/apt/trusted.gpg.d/
+        sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+        rm -f packages.microsoft.gpg
+        cd -
+        rm -fr "${temp}"
+        sudo apt-get install -y apt-transport-https
+        sudo apt-get update
+        sudo apt-get install code
+        echo "Installing VSCode extensions..."
+        sh -c "$(wget --no-cache -O- https://raw.githubusercontent.com/manuelgustavo/vscode-extensions/main/vscode-extensions.sh)"
+        installed+="VScode + extensions\n"
+    fi
 }
 
 main()
