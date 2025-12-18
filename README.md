@@ -18,7 +18,11 @@ Yaru-dark is set as default.
 
 ### Gnome Extensions
 
+- ArcMenu
+- Burn My Windows
+- Coverflow Alt-Tab
 - Dash to Panel
+- No overview at start-up
 - system-monitor-next
 - Removable Drive Menu
 
